@@ -1,0 +1,46 @@
+
+############################################################
+# Update system
+############################################################
+
+$ sudo apt-get update -y && sudo apt-get upgrade -y
+
+############################################################
+# Install packages and libraries
+############################################################
+$ sudo apt-get install python3-pip
+$ sudo pip3 install adafruit-blinka
+$ sudo pip3 install adafruit-circuitpython-charlcd
+$ sudo apt-get install python-rpi.gpio python3-rpi.gpio
+
+
+############################################################
+# Setup temperature sensor (just for testing)
+############################################################
+
+$ sudo lsmod #to see missing modules
+$ sudo modprobe wire
+$ sudo modprobe w1-gpio
+$ sudo modprobe w1-therm
+$ sudo lsmod #to see loaded modules
+
+############################################################
+# Setup temperature sensor permanently 
+# see also: https://de.pinout.xyz/pinout/1_wire#
+# maybe ,pullup=0 or ,pullup=1 after dtoverlay?
+############################################################
+$ sudo nano /boot/config.txt 
+
+at end of file add:
+# Temp sensor
+dtoverlay=w1-gpio
+gpiopin=4
+
+############################################################
+# How to read sensor data
+# https://developer-blog.net/raspberry-pi-temperatur-sensor-18b20/
+############################################################
+
+# read temp via shell from temperature sensor  "28-0215c2445fff" which is mounted at /sys/bus/w1/devices
+
+$ cat /sys/bus/w1/devices/28-0215c2445fff/w1_slave 
